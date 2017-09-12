@@ -1,0 +1,36 @@
+{
+	"Database": {
+		"Type": "MySQL",
+		"MySQL": {
+			"Username": "root",
+			"Password": "",
+			"Name": "metrics",
+			"Hostname": "127.0.0.1",
+			"Port": 3306,
+			"Parameter": "?parseTime=true"
+		}
+	},
+
+	"TestDatabase": {
+		"Type": "MySQL",
+		"MySQL": {
+			"Username": "root",
+			"Password": "",
+			"Name": "testmetrics",
+			"Hostname": "127.0.0.1",
+			"Port": 3306,
+			"Parameter": "?parseTime=true"
+		}
+	},
+
+	"Server": {
+		"Hostname": "",
+		"UseHTTP": true,
+		"UseHTTPS": false,
+		"HTTPPort": 8000,
+		"HTTPSPort": 443,
+		"CertFile": "tls/server.crt",
+		"KeyFile": "tls/server.key",
+		"Pool": 2
+	}
+}
