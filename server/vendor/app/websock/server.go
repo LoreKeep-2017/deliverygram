@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"app/store/types"
+	"app/store"
 )
 
 type Server struct {
@@ -89,6 +90,24 @@ func startHTTP(handlers http.Handler, s Server) {
 	if *listenOn != "" {
 		config.Listen = *listenOn
 	}
+
+	var err = store.Open(string(config.StoreConfig))
+	if err != nil {
+		log.Fatal("Failed to connect to DB: ", err)
+	}
+	defer func() {
+		store.Close()
+		log.Println("Closed database connection(s)")
+	}()
+
+	//err = push.Init(string(config.PushConfig))
+	//if err != nil {
+	//	log.Fatal("Failed to initialize push notifications: ", err)
+	//}
+	//defer func() {
+	//	push.Stop()
+	//	log.Println("Stopped push notifications")
+	//}()
 
 
 	// Keep inactive LP sessions for 15 seconds

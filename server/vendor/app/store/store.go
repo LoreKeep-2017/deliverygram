@@ -8,6 +8,8 @@ import (
 	"github.com/tinode/chat/server/auth"
 	"github.com/tinode/chat/server/store/adapter"
 	"github.com/tinode/chat/server/store/types"
+	"log"
+	"app/db/rethinkdb"
 )
 
 const (
@@ -34,6 +36,9 @@ type configType struct {
 // Open initializes the persistence system. Adapter holds a connection pool for a single database.
 //   jsonconf - configuration string
 func Open(jsonconf string) error {
+
+	Register("rethinkdb", &rethinkdb.RethinkDbAdapter{})
+
 	if adaptr == nil {
 		return errors.New("store: attept to Open an adapter before registering")
 	}
@@ -95,6 +100,7 @@ func GetUid() types.Uid {
 
 // Generate unique ID as string
 func GetUidString() string {
+	log.Println(uGen);
 	return uGen.GetStr()
 }
 

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"fmt"
 )
 
 type Parser interface {
@@ -19,6 +20,8 @@ func Load(configFile string, p Parser) {
 	if absPath, err = filepath.Abs(configFile); err != nil {
 		log.Fatalln(err)
 	}
+
+	fmt.Println(absPath);
 
 	if input, err = os.Open(absPath); err != nil {
 		log.Fatalln(err)

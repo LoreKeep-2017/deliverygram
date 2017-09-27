@@ -3,13 +3,12 @@ package websock
 import (
 	"encoding/json"
 	"time"
-	"math/rand"
 	"log"
 	"container/list"
 	"sync"
 	"net/http"
 	"github.com/gorilla/websocket"
-	"strconv"
+	"app/store"
 )
 
 
@@ -55,19 +54,18 @@ func (ss *SessionStore) Create(conn interface{}, sid string) *Session {
 	log.Println("step6");
 	s.lastTouched = time.Now()
 	if s.sid == "" {
-		var seededRand *rand.Rand = rand.New(
-			rand.NewSource(time.Now().UnixNano()))
+		//var seededRand *rand.Rand = rand.New(
+			//rand.NewSource(time.Now().UnixNano()))
 
 		//log.Println("step6.1");
 		//log.Println(store.GetUidString())
 		//log.Println(s)
-		//s.sid = store.GetUidString()
-		s.sid = strconv.Itoa(seededRand.Int());
+		s.sid = store.GetUidString()
+		log.Println(s.sid);
+		//s.sid = strconv.Itoa(seededRand.Int());
 	}
 	log.Println("step6.2");
-	log.Println(s.sid);
-	log.Println(ss);
-	log.Println(ss.rw);
+
 	ss.rw.Lock()
 	log.Println(s);
 	ss.sessCache[s.sid] = &s
