@@ -11,11 +11,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="websocket.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="websocket.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vendor/app/websock/websocket.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="75" column="23" lean-forward="false" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="23" />
+            <state relative-caret-position="407">
+              <caret line="109" column="42" lean-forward="false" selection-start-line="109" selection-start-column="42" selection-end-line="109" selection-end-column="42" />
               <folding>
                 <element signature="e#18#87#0" expanded="true" />
               </folding>
@@ -26,8 +26,8 @@
       <file leaf-file-name="sessionstore.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/app/websock/sessionstore.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="68" column="16" lean-forward="true" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="16" />
+            <state relative-caret-position="428">
+              <caret line="158" column="42" lean-forward="false" selection-start-line="158" selection-start-column="42" selection-end-line="158" selection-end-column="42" />
               <folding>
                 <element signature="e#17#142#0" expanded="true" />
               </folding>
@@ -38,8 +38,8 @@
       <file leaf-file-name="store.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/app/store/store.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="61" column="20" lean-forward="true" selection-start-line="61" selection-start-column="20" selection-end-line="61" selection-end-column="20" />
+            <state relative-caret-position="142">
+              <caret line="49" column="22" lean-forward="false" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
               <folding>
                 <element signature="e#15#218#0" expanded="true" />
               </folding>
@@ -47,21 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="session.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="session.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/app/websock/session.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-269">
-              <caret line="521" column="37" lean-forward="false" selection-start-line="521" selection-start-column="33" selection-end-line="521" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="types.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../github.com/tinode/chat/server/store/types/types.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1009">
-              <caret line="191" column="19" lean-forward="true" selection-start-line="191" selection-start-column="19" selection-end-line="191" selection-end-column="19" />
+            <state relative-caret-position="1124">
+              <caret line="410" column="57" lean-forward="true" selection-start-line="410" selection-start-column="57" selection-end-line="410" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -70,10 +60,10 @@
       <file leaf-file-name="datamodel.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/app/websock/datamodel.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="338" column="1" lean-forward="true" selection-start-line="338" selection-start-column="1" selection-end-line="338" selection-end-column="1" />
+            <state relative-caret-position="237">
+              <caret line="82" column="0" lean-forward="true" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
               <folding>
-                <marker date="1506524995000" expanded="true" signature="2355:2624" ph="..." />
+                <marker date="1506584557000" expanded="true" signature="2391:2660" ph="..." />
               </folding>
             </state>
           </provider>
@@ -90,9 +80,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sessCache</find>
-      <find>dispatch</find>
-      <find>globals</find>
       <find>msgserverctrl</find>
       <find>snowflake</find>
       <find>ws_write</find>
@@ -107,19 +94,22 @@
       <find>configType</find>
       <find>uGen</find>
       <find>configfile</find>
-      <find>hello</find>
       <find>queueOut</find>
       <find>topic</find>
       <find>params</find>
       <find>getDefaultAccess</find>
       <find>Pub</find>
-      <find>adaptr</find>
       <find>acc</find>
       <find>reply</find>
       <find>Ctrl</find>
       <find>Params</find>
-      <find>clientcom</find>
       <find>user</find>
+      <find>getA;;</find>
+      <find>getAll</find>
+      <find>clientcom</find>
+      <find>hello</find>
+      <find>adaptr</find>
+      <find>sessCache</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.8.3/libexec" />
@@ -151,12 +141,12 @@
         <option value="$PROJECT_DIR$/vendor/app/websock/http.go" />
         <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/vendor/app/websock/hub.go" />
-        <option value="$PROJECT_DIR$/vendor/app/websock/websocket.go" />
         <option value="$PROJECT_DIR$/vendor/app/websock/server.go" />
         <option value="$PROJECT_DIR$/vendor/app/store/store.go" />
-        <option value="$PROJECT_DIR$/vendor/app/websock/sessionstore.go" />
         <option value="$PROJECT_DIR$/vendor/app/websock/datamodel.go" />
         <option value="$PROJECT_DIR$/vendor/app/websock/session.go" />
+        <option value="$PROJECT_DIR$/vendor/app/websock/sessionstore.go" />
+        <option value="$PROJECT_DIR$/vendor/app/websock/websocket.go" />
       </list>
     </option>
   </component>
@@ -173,11 +163,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="143" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="1" />
     <option name="y" value="23" />
-    <option name="width" value="1669" />
-    <option name="height" value="931" />
+    <option name="width" value="1919" />
+    <option name="height" value="985" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -412,7 +402,7 @@
     <option name="remove_strategy" value="false" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="23" width="1919" height="987" extended-state="6" />
+    <frame x="1" y="23" width="1919" height="985" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1870766" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -420,7 +410,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10431154" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24699454" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2475356" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -753,46 +743,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/app/websock/server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="93" column="23" lean-forward="false" selection-start-line="93" selection-start-column="23" selection-end-line="93" selection-end-column="23" />
-          <folding>
-            <element signature="e#17#137#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/app/websock/websocket.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="75" column="23" lean-forward="false" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="23" />
-          <folding>
-            <element signature="e#18#87#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/app/websock/sessionstore.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="68" column="16" lean-forward="true" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="16" />
-          <folding>
-            <element signature="e#17#142#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/app/store/store.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="61" column="20" lean-forward="true" selection-start-line="61" selection-start-column="20" selection-end-line="61" selection-end-column="20" />
-          <folding>
-            <element signature="e#15#218#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../github.com/tinode/chat/server/store/types/types.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1009">
@@ -801,21 +751,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/app/websock/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="29" column="36" lean-forward="true" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/app/websock/datamodel.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="338" column="1" lean-forward="true" selection-start-line="338" selection-start-column="1" selection-end-line="338" selection-end-column="1" />
+        <state relative-caret-position="237">
+          <caret line="82" column="0" lean-forward="true" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
           <folding>
-            <marker date="1506524995000" expanded="true" signature="2355:2624" ph="..." />
+            <marker date="1506584557000" expanded="true" signature="2391:2660" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vendor/app/websock/session.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-269">
-          <caret line="521" column="37" lean-forward="false" selection-start-line="521" selection-start-column="33" selection-end-line="521" selection-end-column="37" />
+        <state relative-caret-position="1124">
+          <caret line="410" column="57" lean-forward="true" selection-start-line="410" selection-start-column="57" selection-end-line="410" selection-end-column="57" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/app/store/store.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="49" column="22" lean-forward="false" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
+          <folding>
+            <element signature="e#15#218#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/app/websock/sessionstore.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="158" column="42" lean-forward="false" selection-start-line="158" selection-start-column="42" selection-end-line="158" selection-end-column="42" />
+          <folding>
+            <element signature="e#17#142#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/app/websock/websocket.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="109" column="42" lean-forward="false" selection-start-line="109" selection-start-column="42" selection-end-line="109" selection-end-column="42" />
+          <folding>
+            <element signature="e#18#87#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

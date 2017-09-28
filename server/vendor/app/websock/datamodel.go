@@ -80,6 +80,8 @@ type MsgFindQuery struct {
 type MsgClientHi struct {
 	// Message Id
 	Id string `json:"id,omitempty"`
+
+	SId string `json:"sid,omitempty"`
 	// User agent
 	UserAgent string `json:"ua,omitempty"`
 	// Authentication scheme

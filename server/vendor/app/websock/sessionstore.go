@@ -22,6 +22,8 @@ type SessionStore struct {
 
 	// All sessions indexed by session ID
 	sessCache map[string]*Session
+	sessPair map[string]string;
+	needpair string;
 }
 
 func (ss *SessionStore) Create(conn interface{}, sid string) *Session {
@@ -113,6 +115,15 @@ func (ss *SessionStore) GetAll() map[string]*Session{
 	return ss.sessCache
 }
 
+func (ss *SessionStore) GetNeedPair() string{
+	return ss.needpair
+}
+
+
+func (ss *SessionStore) GetAllPair() map[string]string{
+	return ss.sessPair
+}
+
 func (ss *SessionStore) Delete(s *Session) {
 	ss.rw.Lock()
 	defer ss.rw.Unlock()
@@ -145,6 +156,7 @@ func NewSessionStore(lifetime time.Duration) *SessionStore {
 		lifeTime: lifetime,
 
 		sessCache: make(map[string]*Session),
+		sessPair: make(map[string]string),
 	}
 
 	return store

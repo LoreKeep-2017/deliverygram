@@ -191,9 +191,9 @@ func (s *Session) dispatch(msg *ClientComMessage) {
 	//	s.del(msg)
 	//	log.Println("dispatch: Del." + msg.Del.What + " done")
 	//
-	case msg.Acc != nil:
-		s.acc(msg)
-		log.Println("dispatch: Acc done")
+	//case msg.Acc != nil:
+	//	s.acc(msg)
+	//	log.Println("dispatch: Acc done")
 
 	//case msg.Note != nil:
 	//	s.note(msg)
@@ -352,54 +352,69 @@ func parseVersion(vers string) int {
 // Authenticate
 func (s *Session) hello(msg *ClientComMessage) {
 
-	if msg.Hi.Version == "" {
-		s.queueOut(ErrMalformed(msg.Hi.Id, "", msg.timestamp))
-		return
-	}
+	//if msg.Hi.Version == "" {
+	//	s.queueOut(ErrMalformed(msg.Hi.Id, "", msg.timestamp))
+	//	return
+	//}
+	//
+	//if s.ver == 0 {
+	//	s.ver = parseVersion(msg.Hi.Version)
+	//	if s.ver == 0 {
+	//		s.queueOut(ErrMalformed(msg.Hi.Id, "", msg.timestamp))
+	//		return
+	//	}
+	//	// Check version compatibility
+	//	if MIN_SUPPORTED_VERSION_VAL > s.ver {
+	//		s.ver = 0
+	//		s.queueOut(ErrVersionNotSupported(msg.Hi.Id, "", msg.timestamp))
+	//		return
+	//	}
+	//} else {
+	//	s.queueOut(ErrCommandOutOfSequence(msg.Hi.Id, "", msg.timestamp))
+	//	return
+	//}
+	//
+	//s.userAgent = msg.Hi.UserAgent
+	//s.deviceId = msg.Hi.DeviceID
+	//s.lang = msg.Hi.Lang
+	//
+	//params := map[string]interface{}{"ver": VERSION, "build": buildstamp}
+	//var httpStatus int
+	//var httpStatusText string
+	//if s.proto == LPOLL {
+	//	// In case of long polling StatusCreated was reported earlier.
+	//	httpStatus = http.StatusOK
+	//	httpStatusText = "ok"
+	//
+	//} else {
+	//	httpStatus = http.StatusCreated
+	//	httpStatusText = "created"
+	//}
+	//s.queueOut(&ServerComMessage{Ctrl: &MsgServerCtrl{
+	//	Id:        msg.Hi.Id,
+	//	Code:      httpStatus,
+	//	Text:      httpStatusText,
+	//	Params:    params,
+	//	Timestamp: msg.timestamp}})
 
-	if s.ver == 0 {
-		s.ver = parseVersion(msg.Hi.Version)
-		if s.ver == 0 {
-			s.queueOut(ErrMalformed(msg.Hi.Id, "", msg.timestamp))
-			return
-		}
-		// Check version compatibility
-		if MIN_SUPPORTED_VERSION_VAL > s.ver {
-			s.ver = 0
-			s.queueOut(ErrVersionNotSupported(msg.Hi.Id, "", msg.timestamp))
-			return
-		}
-	} else {
-		s.queueOut(ErrCommandOutOfSequence(msg.Hi.Id, "", msg.timestamp))
-		return
-	}
-
-	s.userAgent = msg.Hi.UserAgent
-	s.deviceId = msg.Hi.DeviceID
-	s.lang = msg.Hi.Lang
-
-	params := map[string]interface{}{"ver": VERSION, "build": buildstamp}
+	params := map[string]interface{}{"ver": "0.13", "build": buildstamp}
 	var httpStatus int
 	var httpStatusText string
-	if s.proto == LPOLL {
-		// In case of long polling StatusCreated was reported earlier.
-		httpStatus = http.StatusOK
-		httpStatusText = "ok"
 
-	} else {
-		httpStatus = http.StatusCreated
-		httpStatusText = "created"
-	}
-	s.queueOut(&ServerComMessage{Ctrl: &MsgServerCtrl{
+	sessid := globals.sessionStore.sessPair[s.sid]
+	sessions := globals.sessionStore.GetAll();
+	sess := sessions[sessid]
+
+	httpStatus = http.StatusCreated
+	httpStatusText = "created"
+
+	sess.queueOut(&ServerComMessage{Ctrl: &MsgServerCtrl{
 		Id:        msg.Hi.Id,
 		Code:      httpStatus,
 		Text:      httpStatusText,
 		Params:    params,
 		Timestamp: msg.timestamp}})
 
-	//params := map[string]interface{}{"ver": "0.13", "build": buildstamp}
-	//var httpStatus int
-	//var httpStatusText string
 
 	//sessions := globals.sessionStore.GetAll();
 	//keys := make([]string, 0, len(sessions))
@@ -504,151 +519,151 @@ func (s *Session) hello(msg *ClientComMessage) {
 //		Params:    map[string]interface{}{"user": uid.UserId(), "token": secret, "expires": expires}}})
 //}
 //
-// Account creation
-func (s *Session) acc(msg *ClientComMessage) {
-
-	if s.ver == 0 {
-		s.queueOut(ErrCommandOutOfSequence(msg.Acc.Id, "", msg.timestamp))
-		return
-	}
-
-	// FIXME(gene): it should be possible to change Tags without stating the auth scheme
-	authhdl := store.GetAuthHandler(msg.Acc.Scheme)
-	if authhdl == nil {
-		s.queueOut(ErrMalformed(msg.Acc.Id, "", msg.timestamp))
-		return
-	}
-
-	if strings.HasPrefix(msg.Acc.User, "new") {
-		// User cannot authenticate with the new account because the user is already authenticated
-		if msg.Acc.Login && !s.uid.IsZero() {
-			s.queueOut(ErrAlreadyAuthenticated(msg.Acc.Id, "", msg.timestamp))
-			return
-		}
-
-		// Request to create a new account
-		if ok, authErr := authhdl.IsUnique(msg.Acc.Secret); !ok {
-			log.Println("Not unique: ", authErr.Err)
-			if authErr.Code == auth.ErrDuplicate {
-				s.queueOut(ErrDuplicateCredential(msg.Acc.Id, "", msg.timestamp))
-			} else {
-				s.queueOut(ErrUnknown(msg.Acc.Id, "", msg.timestamp))
-			}
-			return
-		}
-
-		var user types.User
-		var private interface{}
-
-		// Assign default access values in case the acc creator has not provided them
-		user.Access.Auth = getDefaultAccess(types.TopicCat_P2P, true)
-		user.Access.Anon = getDefaultAccess(types.TopicCat_P2P, false)
-
-		if msg.Acc.Desc != nil {
-
-			if msg.Acc.Desc.DefaultAcs != nil {
-				if msg.Acc.Desc.DefaultAcs.Auth != "" {
-					user.Access.Auth.UnmarshalText([]byte(msg.Acc.Desc.DefaultAcs.Auth))
-					user.Access.Auth &= types.ModeCP2P
-					if user.Access.Auth != types.ModeNone {
-						user.Access.Auth |= types.ModeApprove
-					}
-				}
-				if msg.Acc.Desc.DefaultAcs.Anon != "" {
-					user.Access.Anon.UnmarshalText([]byte(msg.Acc.Desc.DefaultAcs.Anon))
-					user.Access.Anon &= types.ModeCP2P
-					if user.Access.Anon != types.ModeNone {
-						user.Access.Anon |= types.ModeApprove
-					}
-				}
-			}
-			if !isNullValue(msg.Acc.Desc.Public) {
-				user.Public = msg.Acc.Desc.Public
-			}
-			if !isNullValue(msg.Acc.Desc.Private) {
-				private = msg.Acc.Desc.Private
-			}
-		}
-
-		if msg.Acc.Tags != nil && len(msg.Acc.Tags) > 0 {
-			tags := make([]string, 0, len(msg.Acc.Tags))
-			if filterTags(&tags, msg.Acc.Tags) > 0 {
-				user.Tags = tags
-			}
-		}
-
-		if _, err := store.Users.Create(&user, private); err != nil {
-			s.queueOut(ErrUnknown(msg.Acc.Id, "", msg.timestamp))
-			return
-		}
-
-		var authLvl int
-		if al, authErr := authhdl.AddRecord(user.Uid(), msg.Acc.Secret, 0); authErr.IsError() {
-			log.Println(authErr.Err)
-			// Attempt to delete incomplete user record
-			store.Users.Delete(user.Uid(), false)
-			s.queueOut(decodeAuthError(authErr.Code, msg.Acc.Id, msg.timestamp))
-			return
-		} else {
-			authLvl = al
-		}
-
-		reply := NoErrCreated(msg.Acc.Id, "", msg.timestamp)
-		params := map[string]interface{}{
-			"user": user.Uid().UserId(),
-		}
-
-		params["desc"] = &MsgTopicDesc{
-			CreatedAt: &user.CreatedAt,
-			UpdatedAt: &user.UpdatedAt,
-			DefaultAcs: &MsgDefaultAcsMode{
-				Auth: user.Access.Auth.String(),
-				Anon: user.Access.Anon.String()},
-			Public:  user.Public,
-			Private: private}
-
-		if msg.Acc.Login {
-			// User wants to use the new account for authentication. Generate token and resord session.
-
-			s.uid = user.Uid()
-			s.authLvl = authLvl
-
-			params["authlvl"] = auth.AuthLevelName(authLvl)
-			params["token"], params["expires"], _ = store.GetAuthHandler("token").GenSecret(s.uid, s.authLvl, 0)
-
-			// Record session
-			if s.deviceId != "" {
-				store.Devices.Update(s.uid, &types.DeviceDef{
-					DeviceId: s.deviceId,
-					Platform: "",
-					LastSeen: msg.timestamp,
-					Lang:     s.lang,
-				})
-			}
-		}
-
-		reply.Ctrl.Params = params
-		s.queueOut(reply)
-
-	} else if !s.uid.IsZero() {
-		// Request to update auth of an existing account. Only basic auth is currently supported
-		// TODO(gene): support adding new auth schemes
-		// TODO(gene): support the case when msg.Acc.User is not equal to the current user
-		if authErr := authhdl.UpdateRecord(s.uid, msg.Acc.Secret, 0); authErr.IsError() {
-			log.Println("failed to update credentials", authErr.Err)
-			s.queueOut(decodeAuthError(authErr.Code, msg.Acc.Id, msg.timestamp))
-			return
-		}
-
-		// TODO(gene): handle tags
-		s.queueOut(NoErr(msg.Acc.Id, "", msg.timestamp))
-
-	} else {
-		// session is not authenticated and this is not an attempt to create a new account
-		s.queueOut(ErrPermissionDenied(msg.Acc.Id, "", msg.timestamp))
-		return
-	}
-}
+//// Account creation
+//func (s *Session) acc(msg *ClientComMessage) {
+//
+//	if s.ver == 0 {
+//		s.queueOut(ErrCommandOutOfSequence(msg.Acc.Id, "", msg.timestamp))
+//		return
+//	}
+//
+//	// FIXME(gene): it should be possible to change Tags without stating the auth scheme
+//	authhdl := store.GetAuthHandler(msg.Acc.Scheme)
+//	if authhdl == nil {
+//		s.queueOut(ErrMalformed(msg.Acc.Id, "", msg.timestamp))
+//		return
+//	}
+//
+//	if strings.HasPrefix(msg.Acc.User, "new") {
+//		// User cannot authenticate with the new account because the user is already authenticated
+//		if msg.Acc.Login && !s.uid.IsZero() {
+//			s.queueOut(ErrAlreadyAuthenticated(msg.Acc.Id, "", msg.timestamp))
+//			return
+//		}
+//
+//		// Request to create a new account
+//		if ok, authErr := authhdl.IsUnique(msg.Acc.Secret); !ok {
+//			log.Println("Not unique: ", authErr.Err)
+//			if authErr.Code == auth.ErrDuplicate {
+//				s.queueOut(ErrDuplicateCredential(msg.Acc.Id, "", msg.timestamp))
+//			} else {
+//				s.queueOut(ErrUnknown(msg.Acc.Id, "", msg.timestamp))
+//			}
+//			return
+//		}
+//
+//		var user types.User
+//		var private interface{}
+//
+//		// Assign default access values in case the acc creator has not provided them
+//		user.Access.Auth = getDefaultAccess(types.TopicCat_P2P, true)
+//		user.Access.Anon = getDefaultAccess(types.TopicCat_P2P, false)
+//
+//		if msg.Acc.Desc != nil {
+//
+//			if msg.Acc.Desc.DefaultAcs != nil {
+//				if msg.Acc.Desc.DefaultAcs.Auth != "" {
+//					user.Access.Auth.UnmarshalText([]byte(msg.Acc.Desc.DefaultAcs.Auth))
+//					user.Access.Auth &= types.ModeCP2P
+//					if user.Access.Auth != types.ModeNone {
+//						user.Access.Auth |= types.ModeApprove
+//					}
+//				}
+//				if msg.Acc.Desc.DefaultAcs.Anon != "" {
+//					user.Access.Anon.UnmarshalText([]byte(msg.Acc.Desc.DefaultAcs.Anon))
+//					user.Access.Anon &= types.ModeCP2P
+//					if user.Access.Anon != types.ModeNone {
+//						user.Access.Anon |= types.ModeApprove
+//					}
+//				}
+//			}
+//			if !isNullValue(msg.Acc.Desc.Public) {
+//				user.Public = msg.Acc.Desc.Public
+//			}
+//			if !isNullValue(msg.Acc.Desc.Private) {
+//				private = msg.Acc.Desc.Private
+//			}
+//		}
+//
+//		if msg.Acc.Tags != nil && len(msg.Acc.Tags) > 0 {
+//			tags := make([]string, 0, len(msg.Acc.Tags))
+//			if filterTags(&tags, msg.Acc.Tags) > 0 {
+//				user.Tags = tags
+//			}
+//		}
+//
+//		if _, err := store.Users.Create(&user, private); err != nil {
+//			s.queueOut(ErrUnknown(msg.Acc.Id, "", msg.timestamp))
+//			return
+//		}
+//
+//		var authLvl int
+//		if al, authErr := authhdl.AddRecord(user.Uid(), msg.Acc.Secret, 0); authErr.IsError() {
+//			log.Println(authErr.Err)
+//			// Attempt to delete incomplete user record
+//			store.Users.Delete(user.Uid(), false)
+//			s.queueOut(decodeAuthError(authErr.Code, msg.Acc.Id, msg.timestamp))
+//			return
+//		} else {
+//			authLvl = al
+//		}
+//
+//		reply := NoErrCreated(msg.Acc.Id, "", msg.timestamp)
+//		params := map[string]interface{}{
+//			"user": user.Uid().UserId(),
+//		}
+//
+//		params["desc"] = &MsgTopicDesc{
+//			CreatedAt: &user.CreatedAt,
+//			UpdatedAt: &user.UpdatedAt,
+//			DefaultAcs: &MsgDefaultAcsMode{
+//				Auth: user.Access.Auth.String(),
+//				Anon: user.Access.Anon.String()},
+//			Public:  user.Public,
+//			Private: private}
+//
+//		if msg.Acc.Login {
+//			// User wants to use the new account for authentication. Generate token and resord session.
+//
+//			s.uid = user.Uid()
+//			s.authLvl = authLvl
+//
+//			params["authlvl"] = auth.AuthLevelName(authLvl)
+//			params["token"], params["expires"], _ = store.GetAuthHandler("token").GenSecret(s.uid, s.authLvl, 0)
+//
+//			// Record session
+//			if s.deviceId != "" {
+//				store.Devices.Update(s.uid, &types.DeviceDef{
+//					DeviceId: s.deviceId,
+//					Platform: "",
+//					LastSeen: msg.timestamp,
+//					Lang:     s.lang,
+//				})
+//			}
+//		}
+//
+//		reply.Ctrl.Params = params
+//		s.queueOut(reply)
+//
+//	} else if !s.uid.IsZero() {
+//		// Request to update auth of an existing account. Only basic auth is currently supported
+//		// TODO(gene): support adding new auth schemes
+//		// TODO(gene): support the case when msg.Acc.User is not equal to the current user
+//		if authErr := authhdl.UpdateRecord(s.uid, msg.Acc.Secret, 0); authErr.IsError() {
+//			log.Println("failed to update credentials", authErr.Err)
+//			s.queueOut(decodeAuthError(authErr.Code, msg.Acc.Id, msg.timestamp))
+//			return
+//		}
+//
+//		// TODO(gene): handle tags
+//		s.queueOut(NoErr(msg.Acc.Id, "", msg.timestamp))
+//
+//	} else {
+//		// session is not authenticated and this is not an attempt to create a new account
+//		s.queueOut(ErrPermissionDenied(msg.Acc.Id, "", msg.timestamp))
+//		return
+//	}
+//}
 //
 //func (s *Session) get(msg *ClientComMessage) {
 //	log.Println("s.get: processing 'get." + msg.Get.What + "'")

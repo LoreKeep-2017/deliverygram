@@ -86,11 +86,38 @@ func (sess *Session) writeLoop() {
 		sess.closeWS() // break readLoop
 	}()
 
+	//log.Println("{session: \""+sess.sid + "\"}")
+	//msgsess := "{sid: \""+sess.sid + "\"}"
 
-	//if err := ws_write(sess.ws, websocket.TextMessage, msg); err != nil {
-	//	log.Println("sess.writeLoop: " + err.Error())
-	//	return
-	//}
+	sessions := globals.sessionStore.GetAll();
+
+	if(globals.sessionStore.needpair != ""){
+		globals.sessionStore.sessPair[globals.sessionStore.needpair] = sess.sid;
+		globals.sessionStore.sessPair[sess.sid] = globals.sessionStore.needpair;
+
+		wsess := sessions[globals.sessionStore.needpair]
+		log.Println(wsess)
+
+		if err := ws_write(wsess.ws, websocket.TextMessage, []byte(sess.sid)); err != nil {
+			log.Println("sess.writeLoop: " + err.Error())
+			return
+		}
+
+		if err := ws_write(sess.ws, websocket.TextMessage, []byte(wsess.sid)); err != nil {
+			log.Println("sess.writeLoop: " + err.Error())
+			return
+		}
+		globals.sessionStore.needpair = ""
+
+	}else{
+		globals.sessionStore.needpair = sess.sid;
+	}
+
+
+	keys := make([]string, 0, len(sessions))
+	for k := range sessions {
+		keys = append(keys, k)
+	}
 
 	for {
 		select {
