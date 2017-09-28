@@ -161,6 +161,8 @@ func ws_write(ws *websocket.Conn, mt int, payload []byte) error {
 
 
 func ServerWebSocket(wrt http.ResponseWriter, req *http.Request){
+	wrt.Header().Set("Content-Type", "text/html; charset=utf-8")
+	wrt.Header().Set("Access-Control-Allow-Origin", "*")
 
 	log.Println("Entered");
 
