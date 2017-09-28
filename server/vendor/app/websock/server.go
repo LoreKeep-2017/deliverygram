@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"app/store/types"
 	"app/store"
+	"github.com/rs/cors"
 )
 
 type Server struct {
@@ -78,7 +79,7 @@ func startHTTP(handlers http.Handler, s Server) {
 	var configfile = flag.String("config", "./config/server.conf", "Path to config file.")
 	var listenOn = flag.String("listen", "", "Override TCP address and port to listen on.")
 	var staticPath = flag.String("static_data", "", "Path to /static data for the server.")
-	var tlsEnabled = flag.Bool("tls_enabled", false, "Override config value for enabling TLS")
+	//var tlsEnabled = flag.Bool("tls_enabled", false, "Override config value for enabling TLS")
 
 	var config configType
 	if raw, err := ioutil.ReadFile(*configfile); err != nil {
@@ -136,12 +137,27 @@ func startHTTP(handlers http.Handler, s Server) {
 
 	fmt.Println(time.Now().Format("2006-01-02 03:04r:05 PM"), "Running HTTP "+httpAddress(s))
 
-	http.HandleFunc("/api/ws", ServerWebSocket)
 
 
-	if err := listenAndServe(config.Listen, *tlsEnabled, string(config.TlsConfig), signalHandler()); err != nil {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/ws", ServerWebSocket)
+
+	// cors.Default() setup the middleware with default options being
+	// all origins accepted with simple methods (GET, POST). See
+	// documentation below for more options.
+	handler := cors.Default().Handler(mux)
+
+	if err := 	http.ListenAndServe(":8000", handler); err != nil {
 		log.Fatal(err)
 	}
+
+	//http.HandleFunc("/api/ws", ServerWebSocket)
+
+
+
+	//if err := listenAndServe(config.Listen, *tlsEnabled, string(config.TlsConfig), signalHandler()); err != nil {
+	//	log.Fatal(err)
+	//}
 
 	//log.Fatal(http.ListenAndServe(httpAddress(s), handlers))
 }
